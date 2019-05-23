@@ -25,8 +25,9 @@ def init():
 
 # Animation function called sequentially
 def animate(i):
-    x = None
-    y = mcp.value
+    x = x_max - i
+    #y = mcp.value
+    y = 1
     line.set_data(x, y)
     return line,
 
