@@ -25,12 +25,12 @@ def init():
 
 # Animation function called sequentially
 def animate(i):
-    x = x_max - i
+    x = np.linspace(0, 2, 1000)
     #y = mcp.value
-    y = 1
+    y = x-i
     line.set_data(x, y)
     return line,
 
-anim = animation.FuncAnimation(fig, animate, init_func=init, interval=20, blit=True)
+anim = animation.FuncAnimation(fig, animate, init_func=init, frames=200, interval=20, blit=True)
 
 plt.show()
