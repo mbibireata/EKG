@@ -5,7 +5,7 @@ from ekg_utils import *
 
 if __name__ == "__main__":
     sig = HeartSignal()
-    V,t = sig.read_file("ScopeData/ALL0008J/F0008CH1.CSV")  
+    V,t = sig.read_file("ScopeData/ALL0005/F0005CH1.CSV")  
     min_thresh = -1.
     V = np.array([i if i>min_thresh else min_thresh for i in V])
     
