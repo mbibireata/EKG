@@ -2,15 +2,17 @@ import numpy as np
 from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+from gpiozero import MCP3008
 
+mcp = MCP3008(channel=0, differential=True)
 
 class Scope(object):
     def __init__(self, ax, maxt=5, dt=0.02):
         self.ax = ax
         self.dt = dt
         self.maxt = maxt
-        self.ymin = -3.
-        self.ymax = 3.
+        self.ymin = -0.1
+        self.ymax = 1.1
 
 
         self.tdata = [0]
@@ -35,24 +37,17 @@ class Scope(object):
         return self.line,
 
 
-def emitter(p=0.03):
-    'return a random value with probability p, else 0'
+def emitter():
+    'return output from MCP'
     while True:
-        v = np.random.rand(1)
-        if v > p:
-            yield 0.
-        else:
-            yield np.random.rand(1)
-
-# Fixing random state for reproducibility
-np.random.seed(19680801)
+        yield mcp.value
 
 
 fig, ax = plt.subplots()
 scope = Scope(ax)
 
 # pass a generator in "emitter" to produce data for the update func
-ani = animation.FuncAnimation(fig, scope.update, emitter, interval=10,
+ani = animation.FuncAnimation(fig, scope.update, emitter, interval=3,
                               blit=True)
 
 plt.show()
