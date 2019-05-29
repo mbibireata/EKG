@@ -38,53 +38,6 @@ class HeartSignal:
     def set_t_step(self, t_step):
         self.t_step = t_step
 
-    '''
-    ### TODO: Generalize
-    def calc_bpm(self):
-        #Calculate moving average with 0.75s in both directions, append to dataset
-        hrw = 0.75
-        mov_avg = self.signal.rolling(int(hrw*self.sample_rate)).mean()
-        avg_hr = (np.mean(self.signal))
-        mov_avg = [avg_hr if math.isnan(x) else x for x in mov_avg]
-        mov_avg = [x*1.2 for x in mov_avg]
-        rolling_mean = mov_avg
-
-        #Mark regions of interest 
-        window = []
-        peaklist = []
-        listpos = 0
-        for datapoint in self.signal:
-            r_mean = rolling_mean[listpos]
-            if (datapoint < r_mean) and (len(window) < 1):
-                listpos += 1
-            elif (datapoint > r_mean):
-                window.append(datapoint)
-                listpos += 1
-            else: 
-                maximum = max(window)
-                beatposition = listpos - len(window) + (window.index(max(window)))
-                peaklist.append(beatposition)
-                window = []
-                listpos += 1
-
-        ybeat = [self.signal[x] for x in peaklist] #y value of all peaks 
-
-        hb_dist_list = []
-        for idx in range(len(peaklist) - 1):
-            hb_dist = (peaklist[idx+1] - peaklist[idx]) / self.sample_rate
-            hb_dist_list.append(hb_dist)
-        
-        hb_dist_list = np.array(hb_dist_list)
-        heart_rate = np.mean(hb_dist_list)*60 #60 comes from scaling to BPM from BPS
-
-        plt.plot(self.signal, alpha=0.5, color='blue')
-        plt.scatter(peaklist, ybeat, color='red', label="BPM: %.3f"%heart_rate)
-        plt.legend()
-        plt.show()
-
-        return(heart_rate)
-    '''
-
     def calc_bpm(self): 
         hb_dist_list = []
         for idx in range(len(self.peak_idx) - 1):
@@ -94,9 +47,6 @@ class HeartSignal:
         hb_dist_list = np.array(hb_dist_list)
         heart_rate = 1/np.mean(hb_dist_list)*60 #60 comes from scaling to BPM from BPS
         return(heart_rate)
-
-
-
 
     # Works very well on good sample using scipy. 
     def find_hr_peaks(self, use_scipy=True, _height=None, _distance=None):
