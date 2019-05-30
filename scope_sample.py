@@ -26,7 +26,7 @@ class Scope(object):
         self.ax.set_ylim(self.ymin, self.ymax) 
         self.ax.set_xlim(0, self.maxt)
 
-        self.t_interval = 3.
+        self.t_interval = 1.
         
         #Information regarding heartbeat data
         self.sig = HeartSignal()
