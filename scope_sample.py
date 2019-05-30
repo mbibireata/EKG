@@ -5,6 +5,7 @@ import matplotlib.animation as animation
 from gpiozero import MCP3008
 from scipy.signal import find_peaks
 from ekg_utils import *
+from time import sleep
 
 mcp = MCP3008(channel=0, differential=True)
 
