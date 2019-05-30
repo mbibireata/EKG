@@ -44,7 +44,7 @@ class Scope(object):
         self.sig.t_step = self.t_interval
 
         # Find peaks
-        peak_info = self.sig.find_hr_peaks(_height=max(self.sig.sig_arr)*0.7, _distance=10)
+        peak_info = self.sig.find_hr_peaks(_height=max(self.sig.sig_arr)*0.6, _distance=10)
         if len(peak_info[0]) == 0:
             self.bpm = 0
         else:
