@@ -62,6 +62,26 @@ class HeartSignal:
         else:
             pass
 
+    def find_aux_peaks(self, _distance=0, d_scale = 1):
+        st_peak_idx = []
+        st_peak_y_vals = []
+        qr_peak_idx = []
+        qr_peak_y_vals = []
+        #print(len(self.peak_idx))
+        for i in range(len(self.peak_idx) - 1):
+            st_seg = max(self.signal_arr[self.peak_idx[i]+_distance:self.peak_idx[i+1]-_distance])
+            st_seg_idx = np.argmax(self.signal_arr[self.peak_idx[i]+_distance:self.peak_idx[i+1]-_distance]) + self.peak_idx[i] + _distance
+
+            qr_seg = max(self.signal_arr[st_seg_idx + d_scale*_distance:self.peak_idx[i+1]-_distance*d_scale])
+            qr_seg_idx = np.argmax(self.signal_arr[st_seg_idx + d_scale*_distance:self.peak_idx[i+1]-_distance*d_scale]) + st_seg_idx + _distance*d_scale
+
+            st_peak_idx.append(st_seg_idx)
+            st_peak_y_vals.append(st_seg)
+            qr_peak_idx.append(qr_seg_idx)
+            qr_peak_y_vals.append(qr_seg)
+        
+        return([st_peak_idx, st_peak_y_vals, qr_peak_idx, qr_peak_y_vals])
+
     def compute_signal_fft(self, _type="real"):
         if _type == "real": 
             self.sig_fft = np.fft.rfft(self.signal)
