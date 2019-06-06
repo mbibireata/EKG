@@ -82,6 +82,15 @@ class HeartSignal:
         
         return([st_peak_idx, st_peak_y_vals, qr_peak_idx, qr_peak_y_vals])
 
+    def find_inv_peaks(self, _height=None, _distance=None):
+        from scipy.signal import find_peaks
+        peaks = find_peaks(-self.signal_arr, height=_height, distance=_distance)
+        peak_idx = peaks[0]
+        y_vals = np.array([self.signal_arr[i] for i in peak_idx])
+        self.peak_idx = peak_idx
+        self.peak_y_vals = y_vals
+        return([peak_idx, y_vals])
+
     def compute_signal_fft(self, _type="real"):
         if _type == "real": 
             self.sig_fft = np.fft.rfft(self.signal)

@@ -6,7 +6,7 @@ from ekg_utils import *
 
 if __name__== "__main__":
     sig = HeartSignal()
-    path = "ScopeData/ALL0011I/F0011CH1.CSV"
+    path = "ScopeData/ALL0004/F0004CH1.CSV"
     V,t = sig.read_file(path)
 
     # Preprocess data
@@ -17,13 +17,16 @@ if __name__== "__main__":
     # Get peak info for main r wave. Saved as class data member.
     distance = 10
     height_thresh_ratio = 0.6
+    inv_height_thresh_ratio = 0.65
     # peak_info is [[idx],[y val]]
     peak_info = sig.find_hr_peaks(_height=max(V)*height_thresh_ratio,
                                   _distance=distance)
     
     bpm = sig.calc_bpm()
 
-    aux_peak_info = sig.find_aux_peaks(_distance=distance, d_scale=3)
+    aux_peak_info = sig.find_aux_peaks(_distance=distance, d_scale=2)
+
+    inv_peak_info = sig.find_inv_peaks(_height=max(-V)*inv_height_thresh_ratio, _distance=distance)
 
     # Find S waves
 
@@ -50,12 +53,13 @@ if __name__== "__main__":
     plt.scatter([t[i] for i in peak_info[0]], peak_info[1], color="red")
     plt.scatter([t[i] for i in aux_peak_info[0]], aux_peak_info[1], color="green")
     plt.scatter([t[i] for i in aux_peak_info[2]], aux_peak_info[3], color="purple")
+    plt.scatter([t[i] for i in inv_peak_info[0]], inv_peak_info[1], color="blue")
     plt.title("BPM = {:.4f},\n PR Segment = {:.4f},\n RT Segment = {:.4f}".format(bpm, avg_pr_dist, avg_rs_dist))
     plt.xlabel("time, (s)")
     plt.ylabel("Voltage, (V)")
-    #plt.savefig("figures/analysis6.png")
+    plt.savefig("figures/analysis3.png", dpi=300)
     plt.figure(2)
     plt.plot(sig_fft_freq, sig_fft)
     plt.xlabel("Frequency, (Hz)")
-    #plt.savefig("figures/analysis6_fft.png")
+    plt.savefig("figures/analysis3_fft.png", dpi=300)
     plt.show()
